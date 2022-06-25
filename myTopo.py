@@ -33,7 +33,3 @@ class LinearTopology(Topo):
 
 
 topos = { 'linear': LinearTopology }
-	
-
-
-

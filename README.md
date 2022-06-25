@@ -13,3 +13,6 @@ h1 iperf -s -p 81 &
 
 # H2 como client
 h2 iperf -c h1 -p 81
+
+# Check topology using tool
+http://demo.spear.narmox.com/app/?apiurl=demo#!/mininet

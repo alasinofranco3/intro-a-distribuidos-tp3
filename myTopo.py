@@ -1,4 +1,5 @@
 from mininet.topo import Topo
+import sys
 
 class LinearTopology(Topo):
 	"Simple topology example."
@@ -14,19 +15,25 @@ class LinearTopology(Topo):
 		bottomLeftHost = self.addHost( 'h3' )
 		bottomRightHost = self.addHost( 'h4' )
 
-		# Add switches
-		switches = [self.addSwitch( 's1' ), self.addSwitch( 's2' ), self.addSwitch( 's3' ), self.addSwitch( 's4' )]
+        #Add switches
+		switches = []
+		for i in range(int(number_of_switches)):
+			alias = "s"+str(i)
+			switches.append(self.addSwitch(alias))
 
-		# Add links
+ 		# Add links
 		self.addLink( upperLeftHost, switches[0] )
 		self.addLink( bottomLeftHost, switches[0] )
-		self.addLink( switches[0], switches[1] )
-		self.addLink( switches[1], switches[2] )
-		self.addLink( switches[2], switches[3] )
-		self.addLink( switches[3], upperRightHost )
-		self.addLink( switches[3], bottomRightHost )
+
+		for i in range(1,int(number_of_switches)):
+			self.addLink( switches[i-1],switches[i])
+
+		self.addLink( switches[int(number_of_switches)-1], upperRightHost )
+		self.addLink( switches[int(number_of_switches)-1], bottomRightHost )
 
 
 topos = { 'linear': LinearTopology }
+	
+
 
 

@@ -85,7 +85,6 @@ class Controller(EventMixin):
 
         match = of.ofp_match(
             dl_type=pkt.ethernet.IP_TYPE,
-            nw_proto=pkt.ipv4.TCP_PROTOCOL,
             nw_src = IPAddr("10.0.0.1"),
             nw_dst = IPAddr("10.0.0.4"),
         )
@@ -94,25 +93,6 @@ class Controller(EventMixin):
 
         match = of.ofp_match(
             dl_type=pkt.ethernet.IP_TYPE,
-            nw_proto=pkt.ipv4.UDP_PROTOCOL,
-            nw_src = IPAddr("10.0.0.1"),
-            nw_dst = IPAddr("10.0.0.4"),
-        )
-
-        self.drop_packet_with_match_and_send_msg_to_firewall(match, event)
-
-        match = of.ofp_match(
-            dl_type=pkt.ethernet.IP_TYPE,
-            nw_proto=pkt.ipv4.TCP_PROTOCOL,
-            nw_src = IPAddr("10.0.0.4"),
-            nw_dst = IPAddr("10.0.0.1"),
-        )
-
-        self.drop_packet_with_match_and_send_msg_to_firewall(match, event)
-
-        match = of.ofp_match(
-            dl_type=pkt.ethernet.IP_TYPE,
-            nw_proto=pkt.ipv4.UDP_PROTOCOL,
             nw_src = IPAddr("10.0.0.4"),
             nw_dst = IPAddr("10.0.0.1"),
         )

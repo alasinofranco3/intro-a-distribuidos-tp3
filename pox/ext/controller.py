@@ -3,6 +3,7 @@
 # -- Programming Assignment : Layer -2 Firewall Application Professor : Nick Feamster
 # Teaching Assistant : Arpit Gupta
 from pox.core import core
+from config import FIREWALL_SWITCH, IP_HOST_1, RULE_3_HOST_1, RULE_3_HOST_2
 import pox.openflow.libopenflow_01 as of
 from pox.lib.revent import *
 from pox.lib.util import dpidToStr
@@ -19,10 +20,10 @@ log = core.getLogger()
 
 # Add your global variables here ...
 class Controller(EventMixin):
-    def __init__(self, firewall_switch=2) :
+    def __init__(self) :
         self.listenTo(core.openflow)
-        log.debug("Enabling Firewall Module in switch {}".format(firewall_switch))
-        self.firewall_switch = firewall_switch
+        log.debug("Enabling Firewall Module in switch {}".format(FIREWALL_SWITCH))
+        self.firewall_switch = FIREWALL_SWITCH
 
     
     def _handle_ConnectionUp(self, event):
@@ -74,7 +75,7 @@ class Controller(EventMixin):
             dl_type=pkt.ethernet.IP_TYPE,
             nw_proto=pkt.ipv4.UDP_PROTOCOL,
             tp_dst=5001,
-            nw_src = IPAddr("10.0.0.1")
+            nw_src = IPAddr(IP_HOST_1)
         )
 
         self.drop_packet_with_match_and_send_msg_to_firewall(match, event)
@@ -85,16 +86,16 @@ class Controller(EventMixin):
 
         match = of.ofp_match(
             dl_type=pkt.ethernet.IP_TYPE,
-            nw_src = IPAddr("10.0.0.1"),
-            nw_dst = IPAddr("10.0.0.4"),
+            nw_src = IPAddr(RULE_3_HOST_1),
+            nw_dst = IPAddr(RULE_3_HOST_2),
         )
 
         self.drop_packet_with_match_and_send_msg_to_firewall(match, event)
 
         match = of.ofp_match(
             dl_type=pkt.ethernet.IP_TYPE,
-            nw_src = IPAddr("10.0.0.4"),
-            nw_dst = IPAddr("10.0.0.1"),
+            nw_src = IPAddr(RULE_3_HOST_2),
+            nw_dst = IPAddr(RULE_3_HOST_1),
         )
 
         self.drop_packet_with_match_and_send_msg_to_firewall(match, event)
